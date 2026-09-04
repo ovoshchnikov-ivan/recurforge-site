@@ -386,9 +386,13 @@
 
       <div class="shot">
         <figure>
-          <a class="zoom" href="./ui-chat.webp" aria-label="Open the chat screen at full size">
-            <img src="./ui-chat.webp" width="1800" height="1125" loading="lazy" decoding="async"
-                 alt="RecurForge chat: a question about month-two retention, an answer citing which projects it drew on, and two suggested tests with expected effects.">
+          <a class="zoom" href="./ui-chat.webp" data-light="./ui-chat.webp" data-dark="./ui-chat-dark.webp"
+             aria-label="Open the chat screen at full size">
+            <picture>
+              <source class="dark-src" srcset="./ui-chat-dark.webp" media="(prefers-color-scheme: dark)">
+              <img src="./ui-chat.webp" width="1800" height="1125" loading="lazy" decoding="async"
+                   alt="RecurForge chat: a question about month-two retention, an answer citing which projects it drew on, and two suggested tests with expected effects.">
+            </picture>
           </a>
           <figcaption>
             Ask in plain language. Every answer shows which projects and how many campaigns
@@ -399,9 +403,13 @@
 
       <div class="shot">
         <figure>
-          <a class="zoom" href="./ui-analytics.webp" aria-label="Open the analytics screen at full size">
-            <img src="./ui-analytics.webp" width="1800" height="1612" loading="lazy" decoding="async"
-                 alt="RecurForge analytics dashboard: retention by cohort, voluntary churn, opens and clicks by campaign type, deliverability and a campaign table.">
+          <a class="zoom" href="./ui-analytics.webp" data-light="./ui-analytics.webp" data-dark="./ui-analytics-dark.webp"
+             aria-label="Open the analytics screen at full size">
+            <picture>
+              <source class="dark-src" srcset="./ui-analytics-dark.webp" media="(prefers-color-scheme: dark)">
+              <img src="./ui-analytics.webp" width="1800" height="1612" loading="lazy" decoding="async"
+                   alt="RecurForge analytics dashboard: retention by cohort, voluntary churn, opens and clicks by campaign type, deliverability and a campaign table.">
+            </picture>
           </a>
           <figcaption>
             A dashboard of widgets that arrives already filled from a recommended template,
@@ -531,6 +539,21 @@
       var t = active();
       if (meta) meta.setAttribute('content', t === 'dark' ? '#14161A' : '#FFFFFF');
       btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+
+      /* Скріншоти теж мають дві версії. <picture> сам слухає лише системну тему,
+         тому при явному виборі перемикаємо media вручну: "all" — завжди темна,
+         "not all" — ніколи. Без явного вибору повертаємо системне правило. */
+      var explicit = root.getAttribute('data-theme');
+      var rule = explicit === 'dark' ? 'all'
+               : explicit === 'light' ? 'not all'
+               : '(prefers-color-scheme: dark)';
+      var sources = document.getElementsByClassName('dark-src');
+      for (var i = 0; i < sources.length; i++) sources[i].setAttribute('media', rule);
+
+      var links = document.getElementsByClassName('zoom');
+      for (var j = 0; j < links.length; j++) {
+        links[j].setAttribute('href', links[j].getAttribute(t === 'dark' ? 'data-dark' : 'data-light'));
+      }
     }
     btn.addEventListener('click', function () {
       var next = active() === 'dark' ? 'light' : 'dark';

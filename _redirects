@@ -1,0 +1,15 @@
+# Redirect list for recurforge.com.
+#
+# A published article never changes category: the category is part of its
+# address. If one ever has to move, the old address gets a 301 here on the same
+# commit that moves the file — never later.
+#
+# Format, one rule per line:
+#   /blog/<old-category>/<slug>/   /blog/<new-category>/<slug>/   301
+#
+# Render does not read this file by itself. It is the source of truth for the
+# rules; each one also has to be entered once in the Render dashboard under
+# Settings → Redirects and Rewrites. Keeping the list here means the next
+# person can see what exists without logging in.
+#
+# No redirects yet.

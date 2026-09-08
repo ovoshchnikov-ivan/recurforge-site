@@ -1,0 +1,19 @@
+{
+  "email-marketing": "email marketing",
+  "web-push": "web push",
+  "sms": "SMS",
+  "in-app": "in-app",
+  "messengers": "messengers",
+  "onboarding": "onboarding",
+  "activation": "activation",
+  "churn": "churn",
+  "winback": "winback",
+  "deliverability": "deliverability",
+  "segmentation": "segmentation",
+  "automation": "automation",
+  "analytics": "analytics",
+  "experimentation": "experimentation",
+  "pricing": "pricing",
+  "subscriptions": "subscriptions",
+  "lifecycle": "lifecycle"
+}

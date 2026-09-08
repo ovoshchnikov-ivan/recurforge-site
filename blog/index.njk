@@ -1,0 +1,37 @@
+---
+layout: base.njk
+permalink: /blog/index.html
+title: Blog
+metaTitle: "Blog — RecurForge"
+metaDescription: "Notes on lifecycle marketing and retention: what actually moves the numbers, how to measure it honestly, and what to test next."
+ogTitle: "RecurForge blog"
+---
+{% from "macros.njk" import cardList %}
+
+<div class="wrap listing">
+
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">RecurForge</a>
+    <span aria-hidden="true">/</span>
+    <span>Blog</span>
+  </nav>
+
+  <h1>Blog</h1>
+  <p class="lede">{{ site.blog.description }}</p>
+
+  <ul class="cat-entries">
+    {% for category in categories %}
+    <li>
+      <a href="/blog/{{ category.slug }}/">
+        <span class="num">{{ "0" + (loop.index | string) }}</span>
+        <h2>{{ category.title }}</h2>
+        <p>{{ category.description }}</p>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="section-head">Latest</h2>
+  {{ cardList(collections.posts | limit(12)) }}
+
+</div>

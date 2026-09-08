@@ -1,0 +1,20 @@
+{% macro card(post) %}
+<li class="card">
+  <a class="card-link" href="{{ post.url }}">
+    <span class="card-cat">{{ post.data.category | categoryTitle }}</span>
+    <h3>{{ post.data.title }}</h3>
+    <p>{{ post.data.description }}</p>
+    <p class="card-meta">
+      <time datetime="{{ post.data.date | isoDate }}">{{ post.data.date | humanDate }}</time>
+      <span aria-hidden="true">·</span>
+      <span>{{ post.templateContent | readingTime }} min read</span>
+    </p>
+  </a>
+</li>
+{% endmacro %}
+
+{% macro cardList(posts) %}
+<ul class="cards">
+  {% for post in posts %}{{ card(post) }}{% endfor %}
+</ul>
+{% endmacro %}

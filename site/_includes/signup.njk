@@ -1,0 +1,15 @@
+{# Той самий блок і ті самі id, що в першій формі на головній, щоб wire()
+   з index.html обслуговував його без жодних змін. #}
+<div class="signup-block">
+  <p class="eyebrow">Early access</p>
+  <h2>One email when it opens.</h2>
+  <p class="lede">RecurForge is in development. Leave your address and you will hear from me once — when there is something to log into.</p>
+  <div class="signup" id="signup" data-state="idle">
+    <form id="signupForm" novalidate>
+      <input type="email" id="email" name="email" placeholder="you@company.com"
+             autocomplete="email" required aria-label="Your email">
+      <button type="submit" id="submitBtn">Notify me</button>
+    </form>
+    <p class="note" id="note">One email when it opens. Nothing else, ever.</p>
+  </div>
+</div>

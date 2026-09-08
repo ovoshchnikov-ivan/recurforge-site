@@ -1,0 +1,58 @@
+---
+pagination:
+  data: collections.categoryPages
+  size: 1
+  alias: entry
+permalink: "{{ entry.href }}index.html"
+eleventyComputed:
+  title: "{{ entry.category.title }}"
+  metaTitle: "{{ entry.category.title }} — RecurForge blog"
+  metaDescription: "{{ entry.category.description }}"
+  ogTitle: "{{ entry.category.title }}"
+  # Сторінки далі першої потрібні людям і краулеру для обходу, але в індексі
+  # створюють дублікати категорії.
+  robots: "{% if entry.number > 1 %}noindex, follow{% endif %}"
+layout: base.njk
+---
+{% from "macros.njk" import cardList %}
+
+<div class="wrap listing">
+
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">RecurForge</a>
+    <span aria-hidden="true">/</span>
+    <a href="/blog/">Blog</a>
+    <span aria-hidden="true">/</span>
+    <span>{{ entry.category.title }}</span>
+  </nav>
+
+  <h1>{{ entry.category.title }}</h1>
+  <p class="lede">{{ entry.category.description }}</p>
+  {% if entry.total > 1 %}<p class="page-of">Page {{ entry.number }} of {{ entry.total }}</p>{% endif %}
+
+  {% if entry.posts.length %}
+    {{ cardList(entry.posts) }}
+  {% else %}
+    <p class="empty">Nothing here yet.</p>
+  {% endif %}
+
+  {% if entry.total > 1 %}
+  <nav class="pager" aria-label="Pagination">
+    {% if entry.prev %}<a class="pager-prev" href="{{ entry.prev }}">← Newer</a>{% endif %}
+    {% if entry.next %}<a class="pager-next" href="{{ entry.next }}">Older →</a>{% endif %}
+  </nav>
+  {% endif %}
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "RecurForge", "item": "{{ site.url }}/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ site.url }}/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "{{ entry.category.title }}", "item": "{{ site.url }}/blog/{{ entry.category.slug }}/" }
+    ]
+  }
+  </script>
+
+</div>

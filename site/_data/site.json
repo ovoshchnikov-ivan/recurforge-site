@@ -1,0 +1,11 @@
+{
+  "url": "https://recurforge.com",
+  "name": "RecurForge",
+  "blog": {
+    "title": "Blog",
+    "description": "Notes on lifecycle marketing and retention: what actually moves the numbers, and how to tell when it does not."
+  },
+  "defaultAuthor": "ivan",
+  "postsPerPage": 12,
+  "tagPageThreshold": 3
+}

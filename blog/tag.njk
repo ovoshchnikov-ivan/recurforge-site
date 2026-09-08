@@ -1,0 +1,31 @@
+---
+pagination:
+  data: collections.tagPages
+  size: 1
+  alias: entry
+permalink: "{{ entry.href }}index.html"
+eleventyComputed:
+  title: "Articles tagged “{{ entry.label }}”"
+  metaTitle: "Articles tagged “{{ entry.label }}” — RecurForge blog"
+  metaDescription: "Every RecurForge article tagged {{ entry.label }}: case studies and guides on lifecycle marketing, gathered in one place."
+  ogTitle: "Articles tagged “{{ entry.label }}”"
+layout: base.njk
+---
+{% from "macros.njk" import cardList %}
+
+<div class="wrap listing">
+
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">RecurForge</a>
+    <span aria-hidden="true">/</span>
+    <a href="/blog/">Blog</a>
+    <span aria-hidden="true">/</span>
+    <span>{{ entry.label }}</span>
+  </nav>
+
+  <h1>Articles tagged “{{ entry.label }}”</h1>
+  <p class="lede">{{ entry.posts.length }} articles across every category.</p>
+
+  {{ cardList(entry.posts) }}
+
+</div>

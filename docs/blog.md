@@ -103,3 +103,11 @@ knowing:
 
 Build command `npm ci && npm run build`, publish directory `_site`. Node is
 pinned by `.node-version`.
+
+**Taking a page down needs one extra step.** Render goes on serving a file that
+an earlier deploy published, even after a later deploy stops producing it — so
+setting an article to `draft: true`, deleting it, or letting a tag fall back
+below three articles removes it from the sitemap and the feed while the old URL
+still answers 200. To finish the job: Render dashboard → the service → Manual
+Deploy → **Clear build cache & deploy**. Then check the URL actually returns 404
+before calling it unpublished. Publishing and editing need none of this.

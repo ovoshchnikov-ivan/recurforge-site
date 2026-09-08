@@ -6,7 +6,7 @@ description: "Most winback campaigns are a discount sent to everyone who left. T
 keyword: "winback campaign"
 tags: [winback, churn, email-marketing]
 date: 2026-08-26
-draft: false
+draft: true
 og_image: ""
 ---
 

@@ -6,7 +6,7 @@ description: "Onboarding emails usually explain the product. The ones that work 
 keyword: "onboarding emails"
 tags: [onboarding, activation, email-marketing]
 date: 2026-09-05
-draft: false
+draft: true
 og_image: ""
 ---
 

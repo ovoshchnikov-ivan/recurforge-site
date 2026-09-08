@@ -31,7 +31,9 @@ ogTitle: "RecurForge blog"
     {% endfor %}
   </ul>
 
+  {% if collections.posts.length %}
   <h2 class="section-head">Latest</h2>
   {{ cardList(collections.posts | limit(12)) }}
+  {% endif %}
 
 </div>

@@ -6,7 +6,7 @@ description: "Most retention wins are reported against a baseline that was never
 keyword: "measure retention impact"
 tags: [analytics, experimentation, churn]
 date: 2026-09-02
-draft: false
+draft: true
 og_image: ""
 ---
 

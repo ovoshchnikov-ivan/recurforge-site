@@ -6,7 +6,7 @@ description: "A subscription video service assumed people were leaving on purpos
 keyword: "involuntary churn"
 tags: [churn, subscriptions, automation]
 date: 2026-08-12
-draft: false
+draft: true
 og_image: ""
 ---
 

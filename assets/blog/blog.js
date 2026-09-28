@@ -104,3 +104,49 @@ var GOOGLE_ENTRY_ID = 'entry.875920068';
      тому wire() підключає її без жодних змін. */
   wire('signup', 'signupForm', 'email', 'submitBtn', 'note');
 })();
+
+/* Кнопка «Copy link» під статтею. navigator.clipboard буває відсутній або кидає
+   помилку (не https, вбудований перегляд, заборона браузера) — тоді копіюємо
+   старим способом через прихований textarea, а не мовчки нічого не робимо. */
+(function () {
+  var btn = document.querySelector('.copy-link');
+  if (!btn) return;
+  var idle = btn.getAttribute('aria-label');
+  var timer;
+
+  function fallback(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function show(ok) {
+    btn.setAttribute('aria-label', ok ? 'Link copied' : 'Could not copy the link');
+    btn.classList.toggle('copied', ok);
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      btn.setAttribute('aria-label', idle);
+      btn.classList.remove('copied');
+    }, 2000);
+  }
+
+  btn.addEventListener('click', function () {
+    var url = btn.getAttribute('data-url');
+    try {
+      navigator.clipboard.writeText(url).then(
+        function () { show(true); },
+        function () { show(fallback(url)); }
+      );
+    } catch (e) {
+      show(fallback(url));
+    }
+  });
+})();

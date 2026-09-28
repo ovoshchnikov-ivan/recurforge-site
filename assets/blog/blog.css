@@ -204,6 +204,16 @@ main{padding:14px 0 0}
 .social:hover{color:var(--accent);background:var(--hover)}
 .social:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .social svg{display:block}
+button.social{border:0;background:transparent;padding:0;cursor:pointer;font:inherit}
+.social .icon-done{display:none}
+.social.copied{color:var(--accent)}
+.social.copied .icon-copy{display:none}
+.social.copied .icon-done{display:block}
+
+/* Сорок пікселів кнопки навколо іконки 21 — зсуваємо ряд, щоб іконка стала під текст. */
+.share{margin-top:34px;max-width:68ch}
+.follow{margin-top:28px}
+.share-row, .follow-row{display:flex;gap:4px;flex-wrap:wrap;margin-left:-9.5px}
 
 .signup-block{
   margin-top:44px;padding-top:38px;border-top:1px solid var(--line);max-width:68ch;

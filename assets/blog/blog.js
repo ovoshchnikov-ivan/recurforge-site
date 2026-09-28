@@ -44,7 +44,7 @@ var GOOGLE_ENTRY_ID = 'entry.875920068';
 (function () {
   var IDLE = 'One email when it opens. Nothing else, ever.';
 
-  function wire(boxId, formId, inputId, btnId, noteId) {
+  function wire(boxId, formId, inputId, btnId, noteId, place) {
     var box = document.getElementById(boxId);
     var form = document.getElementById(formId);
     var input = document.getElementById(inputId);
@@ -84,14 +84,17 @@ var GOOGLE_ENTRY_ID = 'entry.875920068';
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString()
-      }).then(finish, finish);
+      }).then(function () { finish(true); }, function () { finish(false); });
 
       /* no-cors означає, що відповідь непрозора: підтвердити доставку неможливо.
          Тому показуємо успіх в обох випадках, а надійність перевіряємо тестовим
-         записом у таблиці після деплою. */
-      function finish() {
+         записом у таблиці після деплою.
+         Подію в аналітику шлемо лише коли запит дійшов до сервера: мережева
+         помилка — це точно не підписка. Адресу не передаємо ніколи. */
+      function finish(reached) {
         box.setAttribute('data-state', 'done');
         say('Got it. You will hear from me when it opens.');
+        if (reached && window.rfTrack) window.rfTrack('email_signup', { form_location: place });
       }
     });
 
@@ -102,7 +105,7 @@ var GOOGLE_ENTRY_ID = 'entry.875920068';
 
   /* Форма на статті — з тими самими id, що й перша форма на головній,
      тому wire() підключає її без жодних змін. */
-  wire('signup', 'signupForm', 'email', 'submitBtn', 'note');
+  wire('signup', 'signupForm', 'email', 'submitBtn', 'note', 'article');
 })();
 
 /* Кнопка «Copy link» під статтею. navigator.clipboard буває відсутній або кидає

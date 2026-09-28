@@ -285,6 +285,14 @@
   .social svg{display:block}
   .follow{margin-top:28px}
   .follow-row{display:flex;gap:4px;flex-wrap:wrap;margin-left:-9.5px}
+  .foot-links{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
+    letter-spacing:0.08em;color:var(--muted);margin-top:20px;
+  }
+  .foot-links a, .foot-links button{color:var(--muted);text-decoration:none}
+  .foot-links button{font:inherit;letter-spacing:inherit;background:none;border:0;padding:0;cursor:pointer}
+  .foot-links a:hover, .foot-links button:hover{color:var(--accent)}
+  .foot-links a:focus-visible, .foot-links button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important}
@@ -560,8 +568,11 @@
         </a>
       </div>
     </div>
+    <p class="foot-links"><button type="button" data-consent-open>Analytics cookies</button></p>
   </div>
 </footer>
+
+<script src="/assets/consent.js" defer></script>
 
 <script>
   (function () {
@@ -622,7 +633,7 @@
 
     /* Форм на сторінці дві — угорі й унизу. Логіка одна, тому підключаємо її
        обом однаково, а не копіюємо код удруге. */
-    function wire(boxId, formId, inputId, btnId, noteId) {
+    function wire(boxId, formId, inputId, btnId, noteId, place) {
       var box = document.getElementById(boxId);
       var form = document.getElementById(formId);
       var input = document.getElementById(inputId);
@@ -662,14 +673,17 @@
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: body.toString()
-        }).then(finish, finish);
+        }).then(function () { finish(true); }, function () { finish(false); });
 
         /* no-cors означає, що відповідь непрозора: підтвердити доставку неможливо.
            Тому показуємо успіх в обох випадках, а надійність перевіряємо тестовим
-           записом у таблиці після деплою. */
-        function finish() {
+           записом у таблиці після деплою.
+           Подію в аналітику шлемо лише коли запит дійшов до сервера: мережева
+           помилка — це точно не підписка. Адресу не передаємо ніколи. */
+        function finish(reached) {
           box.setAttribute('data-state', 'done');
           say('Got it. You will hear from me when it opens.');
+          if (reached && window.rfTrack) window.rfTrack('email_signup', { form_location: place });
         }
       });
 
@@ -678,8 +692,8 @@
       });
     }
 
-    wire('signup', 'signupForm', 'email', 'submitBtn', 'note');
-    wire('signup2', 'signupForm2', 'email2', 'submitBtn2', 'note2');
+    wire('signup', 'signupForm', 'email', 'submitBtn', 'note', 'hero');
+    wire('signup2', 'signupForm2', 'email2', 'submitBtn2', 'note2', 'footer');
   })();
 </script>
 

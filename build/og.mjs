@@ -23,13 +23,53 @@ const CACHE = path.join(ROOT, "node_modules", ".cache", "recurforge-fonts");
 const W = 1200;
 const H = 630;
 const MARGIN = 92;
-const TEXT_WIDTH = W - MARGIN * 2;
+const TEXT_WIDTH = 600;
 
 const INK = "#14161A";
 const TEXT = "#E7E6E3";
 const ACCENT = "#E5A171";
 const RULE = "#A8481A";
 const MUTED = "#8E9096";
+const EDGE = "#262A2F";
+/* Одна тональність, від тьмяного до яскравого: більше значення — світліше.
+   Найтьмяніший крок ще відрізняється від фону, інакше нижні когорти зникають. */
+const RAMP = ["#7A3F20", "#96552F", "#B26F42", "#C98C60", "#DCAC84", "#EFC9AB"];
+const EMPTY = "#1A1D23";
+
+/* Когортна таблиця: кожен наступний рядок коротший, бо молодша когорта прожила
+   менше місяців. Це та сама форма, що на екрані аналітики продукту, і вона ж
+   пояснює, про що взагалі цей блог. */
+const COHORTS = [
+  [100, 68, 47, 41, 38, 36],
+  [100, 71, 51, 44, 41],
+  [100, 69, 48, 42],
+  [100, 73, 55],
+  [100, 76],
+  [100],
+];
+const COLS = 6;
+const CELL_W = 49;
+const CELL_H = 36;
+const CELL_GAP = 8;
+const GRID_X = W - MARGIN - (COLS * CELL_W + (COLS - 1) * CELL_GAP);
+const GRID_Y = Math.round((H - (COHORTS.length * CELL_H + (COHORTS.length - 1) * CELL_GAP)) / 2);
+
+/* 30–100 на шість сходинок. Ділення на рівні двадцятки збивало б усе
+   в дві сходинки, і карта читалася б як суцільна пляма. */
+const bucket = (v) => Math.max(0, Math.min(5, Math.round(((v - 30) / 70) * 5)));
+
+function cohortGrid() {
+  const cells = [];
+  COHORTS.forEach((row, r) => {
+    const y = GRID_Y + r * (CELL_H + CELL_GAP);
+    for (let c = 0; c < COLS; c += 1) {
+      const x = GRID_X + c * (CELL_W + CELL_GAP);
+      const fill = c < row.length ? RAMP[bucket(row[c])] : EMPTY;
+      cells.push(`<rect x="${x}" y="${y}" width="${CELL_W}" height="${CELL_H}" rx="6" fill="${fill}"/>`);
+    }
+  });
+  return cells.join("\n    ");
+}
 
 const FONTS = {
   chivoBold: "@fontsource/chivo/files/chivo-latin-800-normal.woff2",
@@ -72,20 +112,20 @@ function wrap(words, size, measure, maxWidth) {
   return lines;
 }
 
-/* Три рядки — межа. Не влазить — зменшуємо кегль, а не ламаємо картку. */
+/* Чотири рядки — межа. Не влазить — зменшуємо кегль, а не ламаємо картку. */
 function fitTitle(title, measure) {
   const words = String(title).split(/\s+/).filter(Boolean);
-  for (const size of [60, 54, 48, 42, 37]) {
+  for (const size of [54, 48, 42, 37, 33]) {
     const lines = wrap(words, size, measure, TEXT_WIDTH);
-    if (lines.length <= 3) return { size, lines };
+    if (lines.length <= 4) return { size, lines };
   }
-  return { size: 37, lines: wrap(words, 37, measure, TEXT_WIDTH).slice(0, 3) };
+  return { size: 33, lines: wrap(words, 33, measure, TEXT_WIDTH).slice(0, 4) };
 }
 
 function svgFor(title, measure) {
   const { size, lines } = fitTitle(title, measure);
   const lineHeight = Math.round(size * 1.28);
-  const firstBaseline = 285 + Math.round(size * 0.78);
+  const firstBaseline = 268 + Math.round(size * 0.78);
 
   const titleLines = lines
     .map(
@@ -96,6 +136,9 @@ function svgFor(title, measure) {
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
     <rect width="${W}" height="${H}" fill="${INK}"/>
+    <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" fill="none" stroke="${EDGE}"/>
+
+    ${cohortGrid()}
 
     <g transform="translate(${MARGIN}, 96) scale(1.18)">
       <mask id="linkcut" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
